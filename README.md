@@ -1,4 +1,4 @@
-# Blogging Website
+# Word Weaver
 
 ## Overview
 A blogging website that allows users to create, read, and manage blog posts. The application features a clean and modern interface with robust functionality powered by a strong tech stack.
