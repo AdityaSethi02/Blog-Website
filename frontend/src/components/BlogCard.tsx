@@ -4,13 +4,14 @@ interface BlogCardProps {
     authorName: string,
     title: string,
     content: string,
-    publishedDate: string,
+    publishedAt: string,
     id: number
 }
 
 export const BlogCard = ({
-    id, authorName, title, content, publishedDate
+    id, authorName, title, content, publishedAt
 }: BlogCardProps) => {
+    console.log("BlogCardProps:", publishedAt); // BlogCardProps: NaNth Invalid undefined
     return (
         <div>
             <Link to={`/blog/${id}`}>
@@ -25,7 +26,7 @@ export const BlogCard = ({
                                 <Circle />
                             </div>
                             <div className="pl-2 font-thin text-slate-500 text-sm flex justify-center flex-col">
-                                {publishedDate}
+                                {publishedAt}
                             </div>
                         </div>
                         <div className="text-xl font-semibold pt-2">

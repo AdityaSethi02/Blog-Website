@@ -4,6 +4,16 @@ import { BlogSkeleton } from "../components/BlogSkeleton";
 import { useBlogs } from "../hooks";
 import { formatDate } from "./MyBlogs";
 
+export interface Blog {
+    id: number;
+    title: string;
+    content: string;
+    author: {
+        name: string;
+    };
+    publishedAt: string;
+}
+
 export const AllBlogs = () => {
     const { loading, blogs } = useBlogs();
 
@@ -31,7 +41,7 @@ export const AllBlogs = () => {
 
             <div className="flex justify-center">
                 <div>
-                    {blogs.map(blog => <BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Anonymous"} title={blog.title} content={blog.content} publishedDate={formatDate(new Date())} />)}
+                    {blogs.map(blog => <BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Anonymous"} title={blog.title} content={blog.content} publishedAt={formatDate(new Date(blog.publishedAt))} />)}
                 </div>
             </div>
         </div>

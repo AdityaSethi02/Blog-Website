@@ -5,7 +5,7 @@ import { BlogCard } from "../components/BlogCard";
 import { AppBar } from "../components/AppBar";
 import { Link } from "react-router-dom";
 
-interface Blog {
+export interface Blog {
     id: number;
     title: string;
     content: string;
@@ -14,6 +14,7 @@ interface Blog {
     };
     publishedAt: string;
 }
+
 export const MyBlogs = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +74,7 @@ export const MyBlogs = () => {
         <AppBar />
         <div className="flex flex-col items-center justify-center">
             {blogs.map((blog) => (
-                <BlogCard key={blog.id} id={blog.id} authorName={blog.author.name} title={blog.title} content={blog.content} publishedDate={formatDate(new Date())} />
+                <BlogCard key={blog.id} id={blog.id} authorName={blog.author.name} title={blog.title} content={blog.content} publishedAt={formatDate(new Date(blog.publishedAt))} />
             ))}
         </div>
     </div>
