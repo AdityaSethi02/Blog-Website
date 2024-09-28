@@ -57,4 +57,4 @@ cd backend
 npm start
 ```
 
-Project Deployed: https://wordweaver-blog.vercel.app/signup
+Project Deployed: https://wordweaver-blog.vercel.app
