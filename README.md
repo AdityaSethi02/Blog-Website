@@ -56,6 +56,3 @@ npm start
 cd backend
 npm start
 ```
-
-## Usage
-Visit `http://localhost:3000` in your web browser to access the blogging website.
