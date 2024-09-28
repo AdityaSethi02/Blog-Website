@@ -10,27 +10,33 @@ export const blogRouter = new Hono<{
         JWT_SECRET: string;
     },
     Variables: {
-        userId: string;
+        userId: number;
     }
 }>();
 
-blogRouter.use(async (c, next) => {
-    const authHeader = c.req.header("Authorization");
+blogRouter.use("/*", async (c, next) => {
+    const authHeader = (c.req.header("Authorization") || "").split(" ")[1];
+    // console.log("Auth Header is", authHeader);
+
     if (!authHeader) {
-        c.status(401);
+        c.status(403);
         return c.json({ error: "Unauthorized" });
     }
 
-    // const token = authHeader.split(" ")[1];
-    const user = await verify(authHeader, c.env.JWT_SECRET);
-
-    if (!user) {
-        c.status(401);
-        return c.json({ error: "Unauthorized" });
+    try {
+        const user = await verify(authHeader, c.env.JWT_SECRET);
+        if (user) {
+            c.set("userId", Number(user.id));
+            await next();
+        } else {
+            c.status(403);
+            return c.json({ msg: "Forbidden" });
+        }
+    } catch (error) {
+        // console.log("JWT Verification Error", error);
+        c.status(403);
+        return c.json({ error: "Unauthorized", errorDetails: error });
     }
-
-    c.set("userId", String(user.id));
-    await next();
 });
 
 blogRouter.post('/create', async (c) => {
@@ -46,15 +52,21 @@ blogRouter.post('/create', async (c) => {
         return c.json ({ error: "Invalid Inputs", details: parsedInput.error.errors });
     }
 
-    const blog = await prisma.blog.create({
-        data: {
-            title: body.title,
-            content: body.content,
-            authorId: userId
-        }
-    });
+    try {
+        const blog = await prisma.blog.create({
+            data: {
+                title: body.title,
+                content: body.content,
+                authorId: userId,
+                published: true,
+                publishedAt: new Date()
+            }
+        });
 
     return c.json({ id: blog.id });
+    } catch (error) {
+        return c.json({ error: "Error while publishing the blog" });
+    }
 });
 
 blogRouter.put("/update", async (c) => {
@@ -104,7 +116,18 @@ blogRouter.get("/bulk", async (c) => {
         datasourceUrl: c.env.DATABASE_URL
     });
 
-    const allBlogs = await prisma.blog.findMany();
+    const allBlogs = await prisma.blog.findMany({
+        select: {
+            content: true,
+            title: true,
+            id: true,
+            author: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
 
     return c.json(allBlogs);
 });
@@ -115,11 +138,56 @@ blogRouter.get("/blog/:id", async (c) => {
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
 
-    const blog = await prisma.blog.findUnique({
-        where: {
-            id: id
-        }
-    });
+    try {
+        const blog = await prisma.blog.findFirst({
+            where: {
+                id: Number(id)
+            },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+        return c.json({ blog: blog });
+    } catch (error) {
+        c.status(411);
+        return c.json({ msg: "Error while fetching the blog" });
+    }
+});
 
-    return c.json(blog);
+blogRouter.get('/my-blogs', async (c) => {
+    const userId = c.get("userId");
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try{
+        const userBlogs = await prisma.blog.findMany({
+            where: {
+                authorId: userId
+            },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                },
+                publishedAt: true
+            }
+        });
+        return c.json({ blogs: userBlogs });
+    } catch (error) {
+        console.error("Error while fetching user blogs:", error);
+        c.status(411);
+        return c.json({ msg: "Error while fetching the blogs" });
+    }
 });

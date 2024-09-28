@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT,
+    "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -10,11 +10,12 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Blog" (
-    "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "authorId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
-    "authorId" TEXT NOT NULL,
+    "publishedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Blog_pkey" PRIMARY KEY ("id")
 );

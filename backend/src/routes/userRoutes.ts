@@ -15,7 +15,6 @@ userRouter.post('/signup', async (c) => {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
-
     const body = await c.req.json();
     const parsedInput = signupInput.safeParse(body);
 
@@ -54,16 +53,30 @@ userRouter.post('/signin', async (c) => {
       return c.json({ error: "Invalid Inputs" , details: parsedInput.error.errors });
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email: body.email
-      }
-    });
-
-    if (!user) {
-      c.status(403);
-      return c.json({ error: "User not found" });
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email: body.email,
+                password: body.password
+            }
+        });
+        if (!user) {
+            c.status(403);
+            return c.json({ error: "User not found" });
+        }
+        const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
+        return c.json({ jwt, user: { name: user.name } });
+    } catch (error) {
+        c.status(403);
+        console.log(error);
+        return c.json({ error: "Error while signin" });
     }
-    const jwt = sign({ id: user.id }, c.env.JWT_SECRET);
-    return c.json({ jwt });
 });
+
+// userRouter.post('/signout', async (c) => {
+//   localStorage.removeItem("jwt");
+//   localStorage.removeItem("authorName");
+
+//   window.location.href = "/signin";
+//     return c.json({ message: "Signout successful" });
+// });
