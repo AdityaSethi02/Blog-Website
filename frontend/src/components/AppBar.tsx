@@ -17,7 +17,7 @@ export const AppBar = () => {
         <div>
             <div className="border-b flex justify-between items-center px-10 py-4">
                 <Link to={`/blogs`} className="flex flex-col justify-center cursor-pointer text-3xl font-bold">
-                    Blogssss
+                    Word Weaver
                 </Link>
 
                 <div className="flex flex-row items-center">
