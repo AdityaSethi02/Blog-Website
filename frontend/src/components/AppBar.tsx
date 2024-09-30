@@ -30,12 +30,15 @@ export const AppBar = () => {
                         </button>
                     </Link>
 
-                    <div onClick={() => setDropDownOpen(!dropDownOpen)} className="cursor-pointer">
+                    <div onClick={() => setDropDownOpen(!dropDownOpen)} className="cursor-pointer relative">
                         <Avatar size={"big"} name={authorName} />
                     </div>
 
                     {dropDownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                        <div className="absolute right-0 mt-[180px] w-48 bg-white rounded-md shadow-lg z-10">
+                            <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                {authorName}
+                            </button>
                             <Link to="/my-blogs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 My Blogs
                             </Link>
