@@ -11,7 +11,6 @@ interface BlogCardProps {
 export const BlogCard = ({
     id, authorName, title, content, publishedAt
 }: BlogCardProps) => {
-    console.log("BlogCardProps:", publishedAt); // BlogCardProps: NaNth Invalid undefined
     return (
         <div>
             <Link to={`/blog/${id}`}>

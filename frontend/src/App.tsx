@@ -5,6 +5,7 @@ import { Blog } from './pages/Blog'
 import { AllBlogs } from "./pages/Blogs";
 import { Publish } from './pages/Publish';
 import { MyBlogs } from './pages/MyBlogs';
+import { UpdateBlog } from './pages/UpdateBlog';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/blogs" element={<AllBlogs />} />
           <Route path="/publish" element={<Publish />} />
           <Route path="/my-blogs" element={<MyBlogs />} />
+          <Route path="/update/:id" element={<UpdateBlog />} />
         </Routes>
       </BrowserRouter>
     </>

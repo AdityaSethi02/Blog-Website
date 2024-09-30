@@ -67,7 +67,7 @@ blogRouter.post('/create', async (c) => {
     }
 });
 
-blogRouter.put("/update", async (c) => {
+blogRouter.put("/update/:id", async (c) => {
     const userId = c.get("userId");
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
@@ -83,7 +83,7 @@ blogRouter.put("/update", async (c) => {
     try {
         const existingBlog = await prisma.blog.findUnique({
             where: {
-                id: body.id
+                id: Number(body.id)
             }
         });
 
@@ -94,7 +94,7 @@ blogRouter.put("/update", async (c) => {
 
         const updatedBlog = await prisma.blog.update({
             where: {
-                id: body.id
+                id: Number(body.id)
             },
             data: {
                 title: body.title,
@@ -132,6 +132,7 @@ blogRouter.get("/bulk", async (c) => {
 
 blogRouter.get("/blog/:id", async (c) => {
     const id = c.req.param("id");
+    console.log(id);
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
@@ -145,6 +146,7 @@ blogRouter.get("/blog/:id", async (c) => {
                 id: true,
                 title: true,
                 content: true,
+                authorId: true,
                 author: {
                     select: {
                         name: true
@@ -159,7 +161,7 @@ blogRouter.get("/blog/:id", async (c) => {
     }
 });
 
-blogRouter.get('/my-blogs', async (c) => {
+blogRouter.get("/my-blogs", async (c) => {
     const userId = c.get("userId");
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
@@ -199,16 +201,24 @@ blogRouter.delete("/delete/:id", async (c) => {
 
     try {
         const blog = await prisma.blog.findUnique({
-            where: { id: Number(id) },
+            where: {
+                id: Number(id)
+            }
         });
 
         if (!blog || blog.authorId !== userId) {
             c.status(403);
+            console.log(id); // returns 2
+            console.log(blog); // returns the blog with id=2, authorId=1
+            console.log((blog == null) ? "blog null" : blog.authorId); // returns 1
+            console.log(userId); // returns 16
             return c.json({ error: "Blog not found" });
         }
 
         await prisma.blog.delete({
-            where: { id: Number(id) },
+            where: {
+                id: Number(id)
+            }
         });
 
         return c.json({ msg: "Blog deleted successfully" });

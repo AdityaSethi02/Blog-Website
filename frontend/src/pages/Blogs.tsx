@@ -2,7 +2,7 @@ import { AppBar } from "../components/AppBar";
 import { BlogCard } from "../components/BlogCard";
 import { BlogSkeleton } from "../components/BlogSkeleton";
 import { useBlogs } from "../hooks";
-import { formatDate } from "./MyBlogs";
+import useFormatDate from "../hooks/formatDate";
 
 export interface Blog {
     id: number;
@@ -16,6 +16,7 @@ export interface Blog {
 
 export const AllBlogs = () => {
     const { loading, blogs } = useBlogs();
+    const formatDate = useFormatDate(new Date());
 
     if (loading) {
         return (
@@ -41,7 +42,7 @@ export const AllBlogs = () => {
 
             <div className="flex justify-center">
                 <div>
-                    {blogs.map(blog => <BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Anonymous"} title={blog.title} content={blog.content} publishedAt={formatDate(new Date())} />)}
+                    {blogs.map(blog => <BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Anonymous"} title={blog.title} content={blog.content} publishedAt={formatDate} />)}
                 </div>
             </div>
         </div>

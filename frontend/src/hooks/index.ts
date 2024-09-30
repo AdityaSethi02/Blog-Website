@@ -6,6 +6,7 @@ export interface Blog {
     id: number;
     title: string;
     content: string;
+    authorId: number;
     author: {
         name: string;
     };
