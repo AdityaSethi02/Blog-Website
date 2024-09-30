@@ -16,7 +16,6 @@ export const blogRouter = new Hono<{
 
 blogRouter.use("/*", async (c, next) => {
     const authHeader = (c.req.header("Authorization") || "").split(" ")[1];
-    // console.log("Auth Header is", authHeader);
 
     if (!authHeader) {
         c.status(403);
@@ -33,7 +32,6 @@ blogRouter.use("/*", async (c, next) => {
             return c.json({ msg: "Forbidden" });
         }
     } catch (error) {
-        // console.log("JWT Verification Error", error);
         c.status(403);
         return c.json({ error: "Unauthorized", errorDetails: error });
     }
@@ -189,5 +187,34 @@ blogRouter.get('/my-blogs', async (c) => {
         console.error("Error while fetching user blogs:", error);
         c.status(411);
         return c.json({ msg: "Error while fetching the blogs" });
+    }
+});
+
+blogRouter.delete("/delete/:id", async (c) => {
+    const userId = c.get("userId");
+    const id = c.req.param("id");
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    try {
+        const blog = await prisma.blog.findUnique({
+            where: { id: Number(id) },
+        });
+
+        if (!blog || blog.authorId !== userId) {
+            c.status(403);
+            return c.json({ error: "Blog not found" });
+        }
+
+        await prisma.blog.delete({
+            where: { id: Number(id) },
+        });
+
+        return c.json({ msg: "Blog deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting blog", error);
+        c.status(500);
+        return c.json({ error: "Failed to delete blog" });
     }
 });
