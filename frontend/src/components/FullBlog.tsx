@@ -1,9 +1,9 @@
-import { Blog } from "../hooks"
+import { Blog } from "../hooks/useBlog"
 import { AppBar } from "./AppBar"
 import { Avatar } from "./BlogCard"
 import { jwtDecode } from "jwt-decode";
-import useDeleteBlog from "../hooks/delete";
-import useFormatDate from "../hooks/formatDate";
+import useDeleteBlog from "../hooks/useDeleteBlog";
+import useFormatDate from "../hooks/useFormatDate";
 import { Link, useNavigate } from "react-router-dom";
 
 export const FullBlog = ({ blog }: {blog: Blog}) => {

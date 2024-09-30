@@ -110,25 +110,44 @@ blogRouter.put("/update/:id", async (c) => {
 });
 
 blogRouter.get("/bulk", async (c) => {
+    const page = Number(c.req.query("page")) || 1;
+    const pageSize = Number(c.req.query("pageSize")) || 5;
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     });
 
-    const allBlogs = await prisma.blog.findMany({
-        select: {
-            content: true,
-            title: true,
-            id: true,
-            author: {
-                select: {
-                    name: true
+    try {
+        const totalBlogs = await prisma.blog.count();
+
+        const allBlogs = await prisma.blog.findMany({
+            skip: (page - 1) * pageSize,
+            take: pageSize,
+            select: {
+                content: true,
+                title: true,
+                id: true,
+                author: {
+                    select: {
+                        name: true
+                    }
                 }
             }
-        }
-    });
+        });
 
-    return c.json(allBlogs);
+        return c.json({
+            blogs: allBlogs,
+            totalBlogs,
+            totalPages: Math.ceil(totalBlogs / pageSize),
+            currentPage: page
+        });
+    } catch (error) {
+        console.error("Error fetching blogs:", error);
+        c.status(500);
+        return c.json({ error: "Failed to fetch blogs" });
+    }
 });
+
 
 blogRouter.get("/blog/:id", async (c) => {
     const id = c.req.param("id");
@@ -208,10 +227,6 @@ blogRouter.delete("/delete/:id", async (c) => {
 
         if (!blog || blog.authorId !== userId) {
             c.status(403);
-            console.log(id); // returns 2
-            console.log(blog); // returns the blog with id=2, authorId=1
-            console.log((blog == null) ? "blog null" : blog.authorId); // returns 1
-            console.log(userId); // returns 16
             return c.json({ error: "Blog not found" });
         }
 

@@ -1,8 +1,9 @@
 import { AppBar } from "../components/AppBar";
 import { BlogCard } from "../components/BlogCard";
 import { BlogSkeleton } from "../components/BlogSkeleton";
-import { useBlogs } from "../hooks";
-import useFormatDate from "../hooks/formatDate";
+import Pagination from "../components/Pagination";
+import { useBlogs } from "../hooks/useBlog";
+import useFormatDate from "../hooks/useFormatDate";
 
 export interface Blog {
     id: number;
@@ -15,7 +16,7 @@ export interface Blog {
 }
 
 export const AllBlogs = () => {
-    const { loading, blogs } = useBlogs();
+    const { loading, blogs, totalPages, currentPage, setCurrentPage } = useBlogs({ page: 1, pageSize: 5 });
     const formatDate = useFormatDate(new Date());
 
     if (loading) {
@@ -42,8 +43,12 @@ export const AllBlogs = () => {
 
             <div className="flex justify-center">
                 <div>
-                    {blogs.map(blog => <BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Anonymous"} title={blog.title} content={blog.content} publishedAt={formatDate} />)}
+                    {blogs.map(blog => (<BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Anonymous"} title={blog.title} content={blog.content} publishedAt={formatDate} />))}
                 </div>
+            </div>
+
+            <div className="flex justify-center mt-6">
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
             </div>
         </div>
     )

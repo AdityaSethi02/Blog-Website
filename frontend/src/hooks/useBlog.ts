@@ -39,9 +39,11 @@ export const useBlog = ({ id }: { id: string }) => {
     return { loading, blog };
 }
 
-export const useBlogs = () => {
+export const useBlogs = ({page=1, pageSize=5}) => {
     const[loading, setLoading] = useState(true);
     const[blogs, setBlogs] = useState<Blog[]>([]);
+    const[totalPages, setTotalPages] = useState(1);
+    const[currentPage, setCurrentPage] = useState(page);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -51,23 +53,22 @@ export const useBlogs = () => {
             setLoading(false);
             return;
         }
-        // console.log(token);
-        axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
-            // console.log("This is the token: ", localStorage.getItem("token"))
+
+        axios.get(`${BACKEND_URL}/api/v1/blog/bulk?page=${currentPage}&pageSize=${pageSize}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-        .then(response => {
-            // console.log(response.data);
-            if (response.data && Array.isArray(response.data)) {
-                setBlogs(response.data);
-            } else {
-                console.error("Blogs data is not an array:", response.data);
-            }
+        .then((response) => {
+            setBlogs(response.data.blogs);
+            setTotalPages(response.data.totalPages);
             setLoading(false);
         })
-    }, [])
+        .catch((error) => {
+            console.error("Error fetching blogs: ", error);
+            setLoading(false);
+        });
+    }, [currentPage, pageSize]);
 
-    return { loading, blogs };
+    return { loading, blogs, totalPages, currentPage, setCurrentPage };
 }
