@@ -3,7 +3,7 @@ import { BlogCard } from "../components/BlogCard";
 import { BlogSkeleton } from "../components/BlogSkeleton";
 import Pagination from "../components/Pagination";
 import { useBlogs } from "../hooks/useBlog";
-import useFormatDate from "../hooks/useFormatDate";
+import useFormatDate from "../utils/formatDate";
 
 export interface Blog {
     id: number;

@@ -1,4 +1,4 @@
-const useFormatDate = (date: Date) => {
+const formattedDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     const formattedDate = date.toLocaleDateString("en-US", options);
     const day = date.getDate();
@@ -10,4 +10,4 @@ const useFormatDate = (date: Date) => {
     return `${day}${suffix} ${formattedDate.split(' ')[0]} ${formattedDate.split(' ')[2]}`;
 }
 
-export default useFormatDate;
+export default formattedDate;

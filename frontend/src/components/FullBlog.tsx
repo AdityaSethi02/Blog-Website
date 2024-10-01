@@ -3,7 +3,7 @@ import { AppBar } from "./AppBar"
 import { Avatar } from "./BlogCard"
 import { jwtDecode } from "jwt-decode";
 import useDeleteBlog from "../hooks/useDeleteBlog";
-import useFormatDate from "../hooks/useFormatDate";
+import useFormatDate from "../utils/formatDate";
 import { Link, useNavigate } from "react-router-dom";
 
 export const FullBlog = ({ blog }: {blog: Blog}) => {

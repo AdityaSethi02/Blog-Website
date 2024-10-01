@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../config";
 import { BlogCard } from "../components/BlogCard";
 import { AppBar } from "../components/AppBar";
 import { Link } from "react-router-dom";
-import useFormatDate from "../hooks/useFormatDate";
+import useFormatDate from "../utils/formatDate";
 
 export interface Blog {
     id: number;
