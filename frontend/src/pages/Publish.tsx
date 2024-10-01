@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { AppBar } from "../components/AppBar";
 import { BACKEND_URL } from "../config";
 import axios from "axios"
+import { useLoggedIn } from "../hooks/useLoggedIn";
 
 export const Publish = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const navigate = useNavigate();
+
+    useLoggedIn();
 
     return (
         <div>

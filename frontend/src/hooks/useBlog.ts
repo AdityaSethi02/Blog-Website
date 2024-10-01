@@ -21,7 +21,6 @@ export const useBlog = ({ id }: { id: string }) => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            console.log("No token found");
             setLoading(false);
             return;
         }
@@ -49,7 +48,6 @@ export const useBlogs = ({page=1, pageSize=5}) => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            console.log("No token found");
             setLoading(false);
             return;
         }

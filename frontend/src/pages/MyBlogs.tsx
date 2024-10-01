@@ -5,6 +5,7 @@ import { BlogCard } from "../components/BlogCard";
 import { AppBar } from "../components/AppBar";
 import { Link } from "react-router-dom";
 import useFormatDate from "../utils/formatDate";
+import { useLoggedIn } from "../hooks/useLoggedIn";
 
 export interface Blog {
     id: number;
@@ -20,6 +21,8 @@ export const MyBlogs = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const formatDate = useFormatDate(new Date());
+
+  useLoggedIn();
 
   useEffect(() => {
     const fetchMyBlogs = async () => {

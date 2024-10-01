@@ -3,12 +3,15 @@ import { useBlog } from "../hooks/useBlog";
 import { AppBar } from "../components/AppBar";
 import { Spinner } from "../components/Spinner";
 import { FullBlog } from "../components/FullBlog";
+import { useLoggedIn } from "../hooks/useLoggedIn";
 
 export const Blog = () => {
     const { id } = useParams();
     const { loading, blog } = useBlog({
         id: id || ""
     });
+
+    useLoggedIn();
 
     if (loading || !blog)
     {

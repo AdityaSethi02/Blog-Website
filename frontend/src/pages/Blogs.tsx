@@ -4,6 +4,7 @@ import { BlogSkeleton } from "../components/BlogSkeleton";
 import Pagination from "../components/Pagination";
 import { useBlogs } from "../hooks/useBlog";
 import useFormatDate from "../utils/formatDate";
+import { useLoggedIn } from "../hooks/useLoggedIn";
 
 export interface Blog {
     id: number;
@@ -18,6 +19,8 @@ export interface Blog {
 export const AllBlogs = () => {
     const { loading, blogs, totalPages, currentPage, setCurrentPage } = useBlogs({ page: 1, pageSize: 5 });
     const formatDate = useFormatDate(new Date());
+
+    useLoggedIn();
 
     if (loading) {
         return (
@@ -43,7 +46,7 @@ export const AllBlogs = () => {
 
             <div className="flex justify-center mt-4">
                 <div>
-                    {blogs.map(blog => (<BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Anonymous"} title={blog.title} content={blog.content} publishedAt={formatDate} />))}
+                    {blogs.map(blog => (<BlogCard key={blog.id} id={blog.id} authorName={blog.author.name || "Guest"} title={blog.title} content={blog.content} publishedAt={formatDate} />))}
                 </div>
             </div>
 

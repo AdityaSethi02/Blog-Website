@@ -19,7 +19,7 @@ blogRouter.use("/*", async (c, next) => {
 
     if (!authHeader) {
         c.status(403);
-        return c.json({ error: "Unauthorized" });
+        return c.json({ error: "Unauthorized hai bhai" });
     }
 
     try {
@@ -33,7 +33,7 @@ blogRouter.use("/*", async (c, next) => {
         }
     } catch (error) {
         c.status(403);
-        return c.json({ error: "Unauthorized", errorDetails: error });
+        return c.json({ error: "Unauthorized hai", errorDetails: error });
     }
 });
 
@@ -151,7 +151,6 @@ blogRouter.get("/bulk", async (c) => {
 
 blogRouter.get("/blog/:id", async (c) => {
     const id = c.req.param("id");
-    console.log(id);
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());

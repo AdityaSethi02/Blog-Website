@@ -6,7 +6,7 @@ import { BACKEND_URL } from "../config";
 import { Spinner } from "./Spinner";
 import { validatePassword } from "../utils/validatePass";
 
-export const Auth = ({ type }: { type: "signup" | "signin" }) => {
+export const Auth = ({ type }: { type: "signup" | "signin" | "blogs"}) => {
     const navigate = useNavigate();
     const [passError, setPassError] = useState<{ password?: string }>({});
     const [loading, setLoading] = useState(false);
@@ -43,8 +43,31 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
                 localStorage.setItem("authorName", authorName);
             }
             navigate("/blogs");
-        } catch (error) {
-            console.error(error);
+        } catch (error: unknown) {
+            setLoading(false);
+
+            if (axios.isAxiosError(error) && error.response && error.response.data) {
+                const errorMsg = error.response.data.error;
+
+                if (errorMsg === "Email already exists") {
+                    setPassError({
+                        password: "Email already exists"
+                    });
+                } else if (errorMsg === "Incorrect password") {
+                    setPassError({
+                        password: "Incorrect password"
+                    });
+                } else if (errorMsg === "User not found") {
+                    setPassError({
+                        password: "Email not registered"
+                    });
+                    setTimeout(() => {
+                        navigate("/signup");
+                    }, 2 * 1000);
+                } else {
+                    console.log("Unkwon error: ", errorMsg);
+                }
+            }
         } finally {
             setLoading(false);
         }

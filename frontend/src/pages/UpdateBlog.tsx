@@ -3,12 +3,15 @@ import { ChangeEvent, useEffect, useState } from "react"
 import { BACKEND_URL } from "../config";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppBar } from "../components/AppBar";
+import { useLoggedIn } from "../hooks/useLoggedIn";
 
 export const UpdateBlog = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const { id } = useParams<{id: string}>();
     const navigate = useNavigate();
+
+    useLoggedIn();
 
     useEffect(() => {
         const fetchBlog = async () => {
