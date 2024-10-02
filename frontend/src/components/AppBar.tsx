@@ -12,6 +12,7 @@ export const AppBar = () => {
     };
 
     const authorName = localStorage.getItem("authorName") || "Guest";
+    const authId = localStorage.getItem("email");
 
     return (
         <div>
@@ -39,7 +40,7 @@ export const AppBar = () => {
                             <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 {authorName}
                             </button>
-                            <Link to="/my-blogs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <Link to={`/my-blogs/${authId}`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 My Blogs
                             </Link>
                             <button onClick={logout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">

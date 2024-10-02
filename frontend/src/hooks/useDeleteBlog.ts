@@ -14,7 +14,7 @@ const useDeleteBlog = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            navigate("/my-blogs");
+            navigate("/my-blogs/:authId");
         } catch (error) {
             console.error("Error deleting blog: ", error);
             alert("Failed to delete blog. Please try again.");

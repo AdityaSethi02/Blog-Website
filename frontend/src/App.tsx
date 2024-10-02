@@ -18,8 +18,8 @@ function App() {
           <Route path="/blog/:id" element={<Blog />} />
           <Route path="/blogs" element={<AllBlogs />} />
           <Route path="/publish" element={<Publish />} />
-          <Route path="/my-blogs" element={<MyBlogs />} />
-          <Route path="/update/:id" element={<UpdateBlog />} />
+          <Route path="/my-blogs/:authId" element={<MyBlogs />} />
+          <Route path="/update/:authId/:id" element={<UpdateBlog />} />
         </Routes>
       </BrowserRouter>
     </>

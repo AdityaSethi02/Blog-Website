@@ -28,7 +28,7 @@ export const MyBlogs = () => {
     const fetchMyBlogs = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get(`${BACKEND_URL}/api/v1/blog/my-blogs`, {
+        const response = await axios.get(`${BACKEND_URL}/api/v1/blog/my-blogs/:authId`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

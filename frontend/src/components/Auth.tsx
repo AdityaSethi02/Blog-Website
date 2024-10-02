@@ -34,7 +34,9 @@ export const Auth = ({ type }: { type: "signup" | "signin" | "blogs"}) => {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInputs);
             const jwt = response.data.jwt;
+            const email = response.data.user.email;
             localStorage.setItem("token", jwt);
+            localStorage.setItem("email", email);
             if (type === "signup" ) {
                 localStorage.setItem("authorName", postInputs.name || response.data.user.name);
             }

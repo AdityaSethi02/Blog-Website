@@ -67,8 +67,10 @@ blogRouter.post('/create', async (c) => {
     }
 });
 
-blogRouter.put("/update/:id", async (c) => {
+blogRouter.put("/update/:authId/:id", async (c) => {
     const userId = c.get("userId");
+    const authId = c.req.param("authId");
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
@@ -179,8 +181,10 @@ blogRouter.get("/blog/:id", async (c) => {
     }
 });
 
-blogRouter.get("/my-blogs", async (c) => {
+blogRouter.get("/my-blogs/:authId", async (c) => {
     const userId = c.get("userId");
+    const authId = c.req.param("authId");
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());

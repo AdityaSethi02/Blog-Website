@@ -9,6 +9,7 @@ export const UpdateBlog = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const { id } = useParams<{id: string}>();
+    const authId = localStorage.getItem("email");
     const navigate = useNavigate();
 
     useLoggedIn();
@@ -32,7 +33,7 @@ export const UpdateBlog = () => {
         const token = localStorage.getItem("token");
 
         try {
-            await axios.put(`${BACKEND_URL}/api/v1/blog/update/${id}`, {
+            await axios.put(`${BACKEND_URL}/api/v1/blog/update/${authId}/${id}`, {
                 id,
                 title,
                 content: description
