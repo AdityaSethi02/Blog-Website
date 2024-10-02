@@ -19,7 +19,7 @@ blogRouter.use("/*", async (c, next) => {
 
     if (!authHeader) {
         c.status(403);
-        return c.json({ error: "Unauthorized hai bhai" });
+        return c.json({ error: "Unauthorized" });
     }
 
     try {
@@ -33,7 +33,7 @@ blogRouter.use("/*", async (c, next) => {
         }
     } catch (error) {
         c.status(403);
-        return c.json({ error: "Unauthorized hai", errorDetails: error });
+        return c.json({ error: "Unauthorized", errorDetails: error });
     }
 });
 
