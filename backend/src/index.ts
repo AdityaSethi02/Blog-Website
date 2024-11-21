@@ -11,7 +11,7 @@ const app = new Hono<{
 }>();
 
 app.use('/*', cors({
-  origin: 'https://wordweaver-blog.vercel.app',
+  origin: ['https://wordweaver-blog.vercel.app', 'http://localhost:5173'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowHeaders: ['Authorization, Content-Type'],
 }))
